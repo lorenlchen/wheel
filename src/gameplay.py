@@ -22,8 +22,8 @@ df = pickle.load(open('data/puzzles.pkl', 'rb'))
 
 train_dates, test_dates = train_test_split(df.date.unique(), )
 
-train_puzzles = df.loc[df.date.isin(train_dates)]
-test_puzzles = df.loc[df.date.isin(test_dates)]
+# train_puzzles = df.loc[df.date.isin(train_dates)]
+test_puzzles = df.query('season > 25')
 
 ngram_voc = pickle.load(open('data/vocab.pkl', 'rb'))
 ngrams_count = pickle.load(open('data/freqs.pkl', 'rb'))
