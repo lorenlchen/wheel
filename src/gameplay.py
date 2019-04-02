@@ -208,6 +208,7 @@ def full_game(rounds=3, puzzle_df=test_puzzles):
                                     name,
                                     top
                                     )
+        display.clear_output()
         if score < 2000:
             print('Minimum 2000 for winner!')
             time.sleep(2)
@@ -369,7 +370,9 @@ def player_turn(masked_text,
     else:
         scores[name] -= 250
     if masked_text == list(text):
-        print(f'Puzzle: {text}')
+        display.clear_output()
+        print_puzzle_info(masked_text, category, remaining,
+                      scores, name, name)
         print(f'{name} wins!')
         win = True
     if not right:
@@ -426,7 +429,9 @@ def computer_turn(masked_text,
         masked_text, right = update_puzzle(masked_text, text, guess, remaining)
 
     if masked_text == list(text):
-        print(f'Puzzle: {text}')
+        display.clear_output()
+        print_puzzle_info(masked_text, category, remaining,
+                      scores, name, 'Computer')
         print('Computer wins!')
         win = True
     if not right:
@@ -437,7 +442,25 @@ def computer_turn(masked_text,
     return masked_text, scores, win, rd
 
 
-def play_puzzle(text, category, comp_first, level, name, top):
+def play_puzzle(text,
+                category=None,
+                comp_first=None,
+                level=None,
+                name=None,
+                top=2500):
+    if name is None:
+        name = input("Player name: ")
+    if level is None:
+        level = int(input("Choose computer level 1-5: "))
+        while level not in range(1, 6):
+            level = int(input("Invalid. Choose computer level 1-5: "))
+    if comp_first is None:
+        if np.random.choice([0, 1]):
+            print("Computer goes first!")
+            comp_first = True
+        else:
+            print(f"{name} goes first!")
+            comp_first = False
     masked_text = list(re.sub(r'[A-Z]', '=', text))
     remaining = set(string.ascii_uppercase)
     rd = 0
@@ -466,7 +489,7 @@ def play_puzzle(text, category, comp_first, level, name, top):
             if win:
                 winner = name
         rd += inc
-    display.clear_output()
+    # display.clear_output()
     return winner, scores[winner]
 
 
@@ -491,3 +514,9 @@ def print_puzzle_info(masked, category, remaining, scores, player, turn):
     print(f"Remaining Vowels: {''.join(sorted(vowels))}")
     print()
     print(f"Turn: {turn}")
+
+
+def custom_puzzle():
+    puzzle = input("Puzzle: ").upper()
+    winner, score = play_puzzle(puzzle, category='custom')
+    print(f'{winner} won {score}!')
