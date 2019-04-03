@@ -14,26 +14,22 @@ This repository contains a python implementation of [Wheel of Fortune](https://e
 
 This repository was written in Python 3.6. Create an environment to be able to play using:
 ```
-git clone path/to/wheel.git
+git clone git@github.com:lorenlchen/wheel.git
 cd wheel
 virtualenv wheelenv
 . wheelenv/bin/activate
 pip install -r requirements.txt
 ```
-From there, launch a jupyter notebook (webapp forthcoming!) from the command line with:
-```
-jupyter notebook
-```
-and open `play_wheel.ipynb`. Advance through the code cells to play a full game against the computer, or to play a custom puzzle!
+From there, launch a `jupyter notebook` (webapp hopefully forthcoming!) from the command line and open `play_wheel.ipynb`. Advance through the code cells to play a full game against the computer, or to play a custom puzzle!
 # Data Download
-Data for this application is scraped from [Wheel Compendium](insert link), a fanmade archive of every Wheel of Fortune game in the Pat Sajak/Vanna White era.
+Data for this application is scraped from [Wheel Compendium](http://buyavowel.boards.net/page/compendium), a fanmade archive of every Wheel of Fortune game in the Pat Sajak/Vanna White era.
 
 To initialize the data download and computer logic creation, run:
 ```
 python make_data.py
 >> make_data()
 ```
-Alternatively, attempting to play the game without existing data will automatically try to initialize the objects.
+Alternatively, attempting to play the game or importing `gameplay.py` without existing data will automatically try to initialize the objects.
 
 # Gameplay
 ## Rules
