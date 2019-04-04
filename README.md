@@ -66,5 +66,5 @@ Alternatively, attempting to play the game or importing `gameplay.py` without ex
 The computer's logic in guessing letters is governed by character n-gram frequency. Its knowledge base is the list of all puzzles that have been played in Wheel of Fortune history. The approximate logic is as follows:
 1. Examine each hidden space remaining in the puzzle.
 2. For each hidden space, consider the surrounding known letters, if any, and separate the puzzle into missing chunks. For example, the puzzle state:
-`==PP= =IRTH===` would be decomposed into: `[' =', '=PP', 'PP= ', ' =IRTH', 'IRTH=', '=', '= ']`
-3. For each chunk, calculate the most likely of the remaining letters to be able to fill in the blank, based on frequency. Though `B` is not necessarily a common letter, it is almost surely filling in the blank in ` =IRTH`.
+`'==PP= =IRTH==='` would be decomposed into: `[' =', '=PP', 'PP= ', ' =IRTH', 'IRTH=', '=', '= ']`
+3. For each chunk, calculate the most likely of the remaining letters to be able to fill in the blank, based on frequency. Though `B` is not necessarily a common letter, it is almost surely filling in the blank in `' =IRTH'`.
