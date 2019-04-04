@@ -7,7 +7,7 @@ This repository contains a python implementation of [Wheel of Fortune](https://e
 * [Getting Started](#getting-started)
 * [Gameplay](#gameplay)
 * [Data Download](#data-download)
-* [Computer Logic](#computer-logic)
+* [Computer AI](#computer-ai)
 * [TODOs](#todos)
 
 # Getting Started
