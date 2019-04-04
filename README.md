@@ -4,11 +4,11 @@ This repository contains a python implementation of [Wheel of Fortune](https://e
 
 # Table of Contents
 
-* Getting Started
-* How to Play
-* Data Download
-* Computer Logic
-* TODOs
+* [Getting Started](#getting-started)
+* [Gameplay](#gameplay)
+* [Data Download](#data-download)
+* [Computer Logic](#computer-logic)
+* [TODOs](#todos)
 
 # Getting Started
 
@@ -68,3 +68,6 @@ The computer's logic in guessing letters is governed by character n-gram frequen
 2. For each hidden space, consider the surrounding known letters, if any, and separate the puzzle into missing chunks. For example, the puzzle state:
 `'==PP= =IRTH==='` would be decomposed into: `[' =', '=PP', 'PP= ', ' =IRTH', 'IRTH=', '=', '= ']`
 3. For each chunk, calculate the most likely of the remaining letters to be able to fill in the blank, based on frequency. Though `B` is not necessarily a common letter, it is almost surely filling in the blank in `' =IRTH'`.
+
+# TODOs
+* Coming soon.
