@@ -227,7 +227,7 @@ def full_game(rounds=3, puzzle_df=test_puzzles):
             winnings = int(winnings)
             print(f"Total Winnings: {winnings + overall_scores[name]}")
         except:
-            print(f'f"Total Winnings: {winnings} + {overall_scores[name]}"')
+            print(f"Total Winnings: {winnings} + {overall_scores[name]}")
     else:
         print("Too bad, computer wins.")
         take_home = max([2000, overall_scores[name]])
