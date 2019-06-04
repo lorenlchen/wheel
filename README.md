@@ -8,6 +8,7 @@ This repository contains a python implementation of [Wheel of Fortune](https://e
 * [Gameplay](#gameplay)
 * [Data Download](#data-download)
 * [Computer AI](#computer-ai)
+* [Acknowledgements](#acknowledgements)
 * [TODOs](#todos)
 
 # Getting Started
@@ -52,8 +53,6 @@ In this implementation, after the revelation of these additional letters in the 
 ## Custom Puzzle
 `custom_puzzle`: This function gives the opportunity for a user to input a custom puzzle for another player to play in a single round against the computer. The puzzle writer should follow prompts to write the puzzle while the player is not looking, and then when finished, call the player to play the round as normal. During custom puzzles, the wheel is formatted as if it is round 1 (highest value of 2500).
 # Data Download
-Data for this application is scraped from [Wheel Compendium](http://buyavowel.boards.net/page/compendium), a fan-made archive of every Wheel of Fortune game in the Pat Sajak/Vanna White era.
-
 To initialize the data download and computer logic creation, run:
 ```
 python src/make_data.py
@@ -69,5 +68,12 @@ The computer's logic in guessing letters is governed by character n-gram frequen
 `'==PP= =IRTH==='` would be decomposed into: `[' =', '=PP', 'PP= ', ' =IRTH', 'IRTH=', '=', '= ']`
 3. For each chunk, calculate the most likely of the remaining letters to be able to fill in the blank, based on frequency. Though `B` is not necessarily a common letter, it is almost surely filling in the blank in `' =IRTH'`.
 
+# Acknowledgements
+
+* Data for this application is scraped from [Wheel Compendium](http://buyavowel.boards.net/page/compendium), a fan-made archive of every Wheel of Fortune game in the Pat Sajak/Vanna White era.
+* Puzzle image is generated from The Word Finder's [WOF Puzzle Generator](https://www.thewordfinder.com/wof-puzzle-generator/)
+
 # TODOs
-* Coming soon.
+* Export to hosted webapp instead of Jupyter Notebook. Should be easy enough to port to Flask, with an HTML/d3 frontend.
+* Solving logic for the computer? Currently, the computer keeps spinning until the puzzle is solved, which is risky.
+* Flesh out README.
