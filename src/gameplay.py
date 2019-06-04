@@ -2,6 +2,8 @@ import os
 import pickle
 import string
 import re
+import random
+from urllib import parse
 
 import pandas as pd
 from sklearn.model_selection import train_test_split
@@ -60,7 +62,7 @@ print('Game Loaded!')
 def calc_ngram_freq(pattern, remaining, max_n=5, counts=ngrams_count, voc=ngram_voc):
     n = len(pattern)
 #     print(pattern)
-    locs = [i for i, letter in enumerate(pattern) if letter == '=']
+    locs = [i for i, letter in enumerate(pattern) if letter == '_']
     if len(locs) != 1:
         return {}
     missing = locs[0]
@@ -68,7 +70,7 @@ def calc_ngram_freq(pattern, remaining, max_n=5, counts=ngrams_count, voc=ngram_
         #         print('long')
         n_sum = defaultdict(float)
         slices = [pattern[i:i+max_n]
-                  for i in range(n-max_n+1) if '=' in pattern[i:i+5]]
+                  for i in range(n-max_n+1) if '_' in pattern[i:i+5]]
         for s in slices:
             slice_freqs = calc_ngram_freq(s, remaining)
             for key, value in slice_freqs.items():
@@ -96,7 +98,7 @@ def calc_ngram_freq(pattern, remaining, max_n=5, counts=ngrams_count, voc=ngram_
 def find_chunks(masked_str):
     padded_masked_str = ' ' + masked_str + ' '
     missing_locs = [i for i, letter in enumerate(
-        padded_masked_str) if letter == '=']
+        padded_masked_str) if letter == '_']
     if not missing_locs:
         return None
     chunks = []
@@ -104,12 +106,12 @@ def find_chunks(masked_str):
     def tokenize_part(text):
         parts = text.split(' ')
         if len(parts) > 1:
-            if '=' in parts[0]:
+            if '_' in parts[0]:
                 return parts[0] + ' '
-            elif '=' in parts[-1]:
+            elif '_' in parts[-1]:
                 return ' ' + parts[-1]
             else:
-                return ' ' + [part for part in parts if '=' in part][0] + ' '
+                return ' ' + [part for part in parts if '_' in part][0] + ' '
         else:
             return text
 
@@ -143,11 +145,11 @@ def make_guess(masked_text, remaining, max_n=5):
     if guess_cons:
         best_cons = max(guess_cons.items(), key=lambda k: k[1])
     else:
-        best_cons = (None, 0)
+        best_cons = (random.choice(remaining_cons), 0)
     if guess_vowels:
         best_vowel = max(guess_vowels.items(), key=lambda k: k[1])
     else:
-        best_vowel = (None, 0)
+        best_vowel = (random.choice(remaining_vowels), -1)
     return best_cons, best_vowel
 
 
@@ -175,9 +177,10 @@ def full_game(rounds=3, puzzle_df=test_puzzles):
     bonus_puzzles = puzzle_df.query('round=="Bonus"')
     print(rules)
     name = input("Player name: ")
-    level = int(input("Choose computer level 1-5: "))
-    while level not in range(1, 6):
-        level = int(input("Invalid. Choose computer level 1-5: "))
+    level = input("Choose computer level 1-5: ")
+    while level not in ['1', '2', '3', '4', '5']:
+        level = input("Invalid: Choose computer level 1-5: ")
+    level = int(level)
     overall_scores = {name: 0, 'Computer': 0}
     if np.random.choice([0, 1]):
         #         print("Computer goes first!")
@@ -234,6 +237,39 @@ def full_game(rounds=3, puzzle_df=test_puzzles):
         print(f'You won ${take_home}')
 
 
+def create_puzzle_img(masked_text, category):
+    puzzle_img_loc_base = "https://www.thewordfinder.com/wof-puzzle-generator/puzzle-thumb.php?bg=1&"
+    puzzle_params = "ln1={}&ln2={}&ln3={}&ln4={}&cat={}&"
+    masked_str = (''.join(masked_text)).split()
+    curr_line = 0
+    line = 0
+    lines = ['']
+    l1, l2, l3, l4 = '', '', '', ''
+    display_img = True
+
+    for word in masked_str:
+        if (curr_line > 0) and (curr_line + len(word) > 10):
+            line += 1
+            curr_line = 0
+            lines.append('')
+        lines[line] += f'{parse.quote(word)} '
+        curr_line += len(word) + 1
+
+    if len(lines) == 4:
+        l1, l2, l3, l4 = lines
+    elif len(lines) == 3:
+        l1, l2, l3 = lines
+    elif len(lines) == 2:
+        l2, l3 = lines
+    elif len(lines) == 1:
+        l2 = lines
+    else:
+        display_img = False
+    if display_img:
+        img_url = puzzle_img_loc_base + puzzle_params.format(l1, l2, l3, l4, category)
+        display.display(display.Image(url=img_url))
+    return display_img
+
 def bonus_round(text, category):
     display.clear_output(wait=True)
     win = False
@@ -244,9 +280,11 @@ def bonus_round(text, category):
         'A European Vacation',
         100000
     ])
-    masked_text = list(re.sub(r'[ABCDFGHIJKMOPQUVWXYZ]', '=', text))
-    print(f"Puzzle: {''.join(masked_text)}")
-    print(f'Category: {category}')
+    masked_text = list(re.sub(r'[ABCDFGHIJKMOPQUVWXYZ]', '_', text))
+    display_img = create_puzzle_img(masked_text, category)
+    if not display_img:
+        print(f"Puzzle: {''.join(masked_text)}")
+        print(f'Category: {category}')
     print("Given: RSTLNE")
     s = ''
     print()
@@ -269,8 +307,10 @@ def bonus_round(text, category):
     left = 3
     sol = ''
     display.clear_output(wait=True)
-    print(f"Puzzle: {''.join(masked_text)}")
-    print(f'Category: {category}')
+    display_img = create_puzzle_img(masked_text)
+    if not display_img:
+        print(f"Puzzle: {''.join(masked_text)}")
+        print(f'Category: {category}')
     print("Given: RSTLNE")
     print(f'Guessed Letters: {s}')
     while sol != text and left > 0:
@@ -325,10 +365,19 @@ def player_turn(masked_text,
     rd = 0
     print_puzzle_info(masked_text, category, remaining, scores, name, name)
     time.sleep(.5)
+    allowable = ['S',
+                 'SPIN',
+                 'V',
+                 'SOLVE']
     if scores[name] < 250:
         mode = input('(S)pin or Sol(V)e? ')
+        while mode.upper() not in allowable:
+            mode = input('Invalid choice: (S)pin or Sol(V)e? ')
     else:
+        allowable += ['B', 'BUY A VOWEL']
         mode = input('(S)pin, (B)uy a vowel, or Sol(V)e? ')
+        while mode.upper() not in allowable:
+            mode = input('Invalid choice: (S)pin, (B)uy a vowel, or Sol(V)e? ')
     if (mode.upper() == 'V') or (mode.upper() == 'SOLVE'):
         sol = input('Solution: ')
         if sol.upper() == text:
@@ -396,7 +445,7 @@ def computer_turn(masked_text,
     print_puzzle_info(masked_text, category, remaining,
                       scores, name, 'Computer')
     best_cons, best_vowel = make_guess(masked_text, remaining, level)
-    if (best_cons[1] > best_vowel[1]) or (scores['Computer'] < 250):
+    if (best_cons[1] >= best_vowel[1]) or (scores['Computer'] < 250):
         space = spin(masked_text,
                      text,
                      category,
@@ -461,7 +510,7 @@ def play_puzzle(text,
         else:
             print(f"{name} goes first!")
             comp_first = False
-    masked_text = list(re.sub(r'[A-Z]', '=', text))
+    masked_text = list(re.sub(r'[A-Z]', '_', text))
     remaining = set(string.ascii_uppercase)
     rd = 0
     scores = {name: 0, 'Computer': 0}
@@ -503,11 +552,13 @@ def player_guess(masked_text, text, vowel, remaining):
 
 
 def print_puzzle_info(masked, category, remaining, scores, player, turn):
+    display_img = create_puzzle_img(masked, category)
     print(f'{player} score: {scores[player]}')
     print(f'Computer score: {scores["Computer"]}')
     print()
-    print(f"Puzzle: {''.join(masked)}")
-    print(f'Category: {category}')
+    if not display_img:
+        print(f"Puzzle: {''.join(masked)}")
+        print(f'Category: {category}')
     cons = remaining - set('AEIOU')
     vowels = remaining - cons
     print(f"Remaining Consonants: {''.join(sorted(cons))}")
