@@ -2,11 +2,9 @@ import os
 import pickle
 
 from bs4 import BeautifulSoup
-import lxml
 import requests
 import pandas as pd
 from sklearn.feature_extraction.text import CountVectorizer
-from sklearn.model_selection import train_test_split
 
 
 def get_puzzles(

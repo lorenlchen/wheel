@@ -5,7 +5,6 @@ import re
 import random
 from urllib import parse
 
-import pandas as pd
 from sklearn.model_selection import train_test_split
 
 from collections import defaultdict
@@ -266,9 +265,11 @@ def create_puzzle_img(masked_text, category):
     else:
         display_img = False
     if display_img:
-        img_url = puzzle_img_loc_base + puzzle_params.format(l1, l2, l3, l4, category)
+        img_url = puzzle_img_loc_base + \
+            puzzle_params.format(l1, l2, l3, l4, category)
         display.display(display.Image(url=img_url))
     return display_img
+
 
 def bonus_round(text, category):
     display.clear_output(wait=True)
@@ -421,7 +422,7 @@ def player_turn(masked_text,
     if masked_text == list(text):
         display.clear_output()
         print_puzzle_info(masked_text, category, remaining,
-                      scores, name, name)
+                          scores, name, name)
         print(f'{name} wins!')
         win = True
     if not right:
@@ -480,7 +481,7 @@ def computer_turn(masked_text,
     if masked_text == list(text):
         display.clear_output()
         print_puzzle_info(masked_text, category, remaining,
-                      scores, name, 'Computer')
+                          scores, name, 'Computer')
         print('Computer wins!')
         win = True
     if not right:
