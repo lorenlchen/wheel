@@ -17,7 +17,7 @@ from src.make_data import make_data
 print('Loading game…')
 if not (os.path.isdir('data')
         and os.path.exists('data/puzzles.pkl')
-        and os.path.exists('data/vocab/pkl')
+        and os.path.exists('data/vocab.pkl')
         and os.path.exists('data/freqs.pkl')):
     make_data()
 
