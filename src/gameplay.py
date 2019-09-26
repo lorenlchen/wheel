@@ -35,7 +35,7 @@ ngrams_count = pickle.load(open('data/freqs.pkl', 'rb'))
 puzz_values = [
     #     '2500',
     '500',
-    '600',
+    '600', S
     '700',
     '600',
     '650',
@@ -561,7 +561,7 @@ def print_puzzle_info(masked, category, remaining, scores, player, turn):
     print(f'Computer score: {scores["Computer"]}')
     print()
     if not display_img:
-        print(f"Puzzle: {''.join(masked)}")
+        print(f"Puzzle: {''.join(masked.replace('_', '-'))}")
         print(f'Category: {category}')
     cons = remaining - set('AEIOU')
     vowels = remaining - cons
