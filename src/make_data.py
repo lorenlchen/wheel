@@ -33,23 +33,20 @@ def make_data():
     # Reload Data
     print('Downloading puzzles…')
     df = get_puzzles()
+    print(d"Found {len(df)} puzzles!")
     if not os.path.exists('data'):
         os.mkdir('data')
     df.to_pickle('data/puzzles.pkl')
 
     print('Initializing AI…')
-    # unigrams = CountVectorizer(lowercase=False, analyzer='char', ngram_range=(1, 1))
     ngrams = CountVectorizer(
         lowercase=False, analyzer='char_wb', ngram_range=(1, 5))
 
-    # X_u = unigrams.fit_transform(df.puzzle)
     X_n = ngrams.fit_transform(df.puzzle)
-
-    # unigram_voc = unigrams.vocabulary_
+    print("Learning patterns…")
     ngram_voc = ngrams.vocabulary_
-
-    # unigrams_count = X_u.toarray().sum(axis=0)
     ngrams_count = X_n.toarray().sum(axis=0)
 
     pickle.dump(ngram_voc, open('data/vocab.pkl', 'wb'))
     pickle.dump(ngrams_count, open('data/freqs.pkl', 'wb'))
+    print("AI is ready!")
