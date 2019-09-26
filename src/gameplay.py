@@ -314,7 +314,7 @@ def bonus_round(text, category):
     left = 3
     sol = ''
     display.clear_output(wait=True)
-    display_img = create_puzzle_img(masked_text)
+    display_img = create_puzzle_img(masked_text, category)
     if not display_img:
         print(f"Puzzle: {''.join(masked_text)}")
         print(f'Category: {category}')
