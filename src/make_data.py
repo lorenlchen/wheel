@@ -33,12 +33,14 @@ def make_data():
     # Reload Data
     print('Downloading puzzles…')
     df = get_puzzles()
-    os.mkdir('data')
+    if not os.path.exists('data'):
+        os.mkdir('data')
     df.to_pickle('data/puzzles.pkl')
 
     print('Initializing AI…')
     # unigrams = CountVectorizer(lowercase=False, analyzer='char', ngram_range=(1, 1))
-    ngrams = CountVectorizer(lowercase=False, analyzer='char_wb', ngram_range=(1, 5))
+    ngrams = CountVectorizer(
+        lowercase=False, analyzer='char_wb', ngram_range=(1, 5))
 
     # X_u = unigrams.fit_transform(df.puzzle)
     X_n = ngrams.fit_transform(df.puzzle)
