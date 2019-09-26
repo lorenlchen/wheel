@@ -33,7 +33,7 @@ def make_data():
     # Reload Data
     print('Downloading puzzles…')
     df = get_puzzles()
-    print(d"Found {len(df)} puzzles!")
+    print(f"Found {len(df)} puzzles!")
     if not os.path.exists('data'):
         os.mkdir('data')
     df.to_pickle('data/puzzles.pkl')
