@@ -1,7 +1,7 @@
-numpy==1.14.3
-requests==2.21.0
-ipython==7.4.0
-beautifulsoup4==4.7.1
-scikit-learn==0.20.3
+numpy
+requests
+ipython
+beautifulsoup4
+scikit-learn
 pandas
 lxml
