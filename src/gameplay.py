@@ -35,7 +35,7 @@ ngrams_count = pickle.load(open('data/freqs.pkl', 'rb'))
 puzz_values = [
     #     '2500',
     '500',
-    '600', S
+    '600',
     '700',
     '600',
     '650',
