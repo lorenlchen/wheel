@@ -146,12 +146,16 @@ def make_guess(masked_text, remaining, max_n=5):
 
     if guess_cons:
         best_cons = max(guess_cons.items(), key=lambda k: k[1])
-    else:
+    elif remaining_cons:
         best_cons = (random.choice(remaining_cons), 0)
+    else:
+        best_cons = (None, -1.5)
     if guess_vowels:
         best_vowel = max(guess_vowels.items(), key=lambda k: k[1])
-    else:
+    elif remaining_vowels:
         best_vowel = (random.choice(remaining_vowels), -1)
+    else:
+        best_vowel = (None, -2)
     return best_cons, best_vowel
 
 
@@ -448,7 +452,7 @@ def computer_turn(masked_text,
     print_puzzle_info(masked_text, category, remaining,
                       scores, name, 'Computer')
     best_cons, best_vowel = make_guess(masked_text, remaining, level)
-    if (best_cons[1] >= best_vowel[1]) or (scores['Computer'] < 250):
+    if (best_cons[1] >= best_vowel[1]) or (scores['Computer'] < 250) and best_cons[0]:
         space = spin(masked_text,
                      text,
                      category,
