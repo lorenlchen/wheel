@@ -216,7 +216,6 @@ def full_game(rounds=3, puzzle_df=test_puzzles):
         display.clear_output()
         if score < 2000:
             print('Minimum 2000 for winner!')
-            time.sleep(2)
             score = 2000
         overall_scores[winner] += score
 
@@ -392,7 +391,7 @@ def player_turn(masked_text,
             rd += 1
             print("Sorry, incorrect.")
             print("Computer's Turn!")
-        time.sleep(3)
+        # input("Enter for next turn:")
         return masked_text, scores, win, rd
     elif (mode.upper() == 'S') or (mode.upper() == 'SPIN'):
         space = spin(masked_text,
@@ -404,14 +403,14 @@ def player_turn(masked_text,
             rd += 1
             print('Bankrupt!')
             print("Computer's Turn!")
-            time.sleep(3)
+            # input("Enter for next turn:")
             scores[name] = 0
             return masked_text, scores, win, rd
         elif space == 'Lose A Turn':
             rd += 1
             print('Lose a Turn!')
             print("Computer's Turn!")
-            time.sleep(3)
+            # input("Enter for next turn:")
             return masked_text, scores, win, rd
         else:
             vowel = False
@@ -431,7 +430,7 @@ def player_turn(masked_text,
     if not right:
         rd += 1
         print("Computer's Turn!")
-    time.sleep(3)
+    input("Enter to advance:")
 
     return masked_text, scores, win, rd
 
@@ -460,14 +459,14 @@ def computer_turn(masked_text,
             rd += 1
             print('Bankrupt!')
             print(f"{name}'s Turn!")
-            time.sleep(3)
+            # input("Enter for next turn:")
             scores['Computer'] = 0
             return masked_text, scores, win, rd
         elif space == 'Lose A Turn':
             rd += 1
             print('Lose a Turn!')
             print(f"{name}'s Turn!")
-            time.sleep(3)
+            # input("Enter for next turn:")
             return masked_text, scores, win, rd
         else:
             val = int(space)
@@ -490,7 +489,7 @@ def computer_turn(masked_text,
     if not right:
         rd += 1
         print(f"{name}'s Turn!")
-    time.sleep(3)
+    input("Enter to advance:")
 
     return masked_text, scores, win, rd
 
@@ -542,7 +541,6 @@ def play_puzzle(text,
             if win:
                 winner = name
         rd += inc
-    # display.clear_output()
     return winner, scores[winner]
 
 
